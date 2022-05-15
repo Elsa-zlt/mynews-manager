@@ -1,0 +1,4 @@
+# Project exclude paths
+/news-mapper/target/
+/news-pojo/target/
+/news-query-ms/target/
