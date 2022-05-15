@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -14,6 +16,23 @@ import java.util.List;
 public class NewsQueryController {
     @Autowired
     private NewsQueryService newsQueryService;
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    public String baseURL = "http://localhost:8877/";
+
+    @GetMapping("queryNews1")
+    public ModelAndView queryNews1() {
+        // 泛型： LinkedHashMap
+        List list = restTemplate.getForObject(baseURL + "queryNews", List.class);
+        System.out.println(list);
+
+        ModelAndView mv = new ModelAndView();
+        mv.addObject("newsList",list);
+        mv.setViewName("index");
+        return mv;
+    }
 
     /**
      * 查询所有新闻列表
