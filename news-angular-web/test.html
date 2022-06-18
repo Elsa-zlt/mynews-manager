@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>angular测试</title>
+  <script src="angularjs/angular.min.js"></script>
+  <script>
+    //1.初始化angular,第2歌参数表示插件的指定
+    var app = angular.module('testApp',[]);
+    //2.初始化控制器controller
+    //$scope表示模型数据与视图之间的中介,$http用于发送http请求
+    app.controller('testController',function ($scope,$http){
+      $scope.num = 1;
+
+      $scope.addNum = function (){
+        $scope.num++;
+      }
+      $scope.userNames = ['张三','李四','王五'];
+      $scope.userList = [{'id':1,'name':'Mike'},{'id':2,'name':'Zhang'},{'id':3,'name':'Danny'}];
+      $scope.loadAllNews = function (){
+        $http.get('http://localhost:8899/news-query/queryNews').success(function (response){
+          $scope.newsList = response;
+        })
+      }
+    });
+  </script>
+</head>
+<body ng-app="testApp" ng-controller="testController" ng-init="loadAllNews()">
+{{num}}
+<input type="text" ng-model="num"/>
+<input type="button" value=" + " ng-click="addNum()"/>
+<ul>
+  <li ng-repeat="name in userNames">{{name}}</li>
+</ul>
+<ul>
+  <li ng-repeat="user in userList">{{user.id}}-{{user.name}}</li>
+</ul>
+<br>
+{{newsList}}
+</body>
+</html>
