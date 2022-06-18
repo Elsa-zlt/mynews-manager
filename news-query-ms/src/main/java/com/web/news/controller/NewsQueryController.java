@@ -4,9 +4,7 @@ import com.web.news.pojo.Category;
 import com.web.news.pojo.News;
 import com.web.news.service.NewsQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -17,58 +15,42 @@ public class NewsQueryController {
     @Autowired
     private NewsQueryService newsQueryService;
 
-    @Autowired
-    private RestTemplate restTemplate;
-
-    public String baseURL = "http://localhost:8877/";
-
-    @GetMapping("queryNews1")
-    public ModelAndView queryNews1() {
-        // 泛型： LinkedHashMap
-        List list = restTemplate.getForObject(baseURL + "queryNews", List.class);
-        System.out.println(list);
-
-        ModelAndView mv = new ModelAndView();
-        mv.addObject("newsList",list);
-        mv.setViewName("index");
-        return mv;
+    @GetMapping("/queryNews")
+    public List<News> queryNews(){
+        return newsQueryService.findAllNews();
     }
 
-    /**
-     * 查询所有新闻列表
-     * @return
-     */
-    @GetMapping("queryNews")
-    public List<News> queryNews() {
-        return newsQueryService.queryNews();
+    @PostMapping("/queryNewsByCondition")
+    public List<News> queryNewsByCondition(@RequestBody News news) {
+        System.out.println(news.getCategoryid());
+        System.out.println(news.getTitle());
+        return newsQueryService.findNewsByCondition(news);
     }
 
-    /**
-     * 根据新闻分类和标题查询新闻列表
-     * @param news
-     * @return
-     */
-    @GetMapping("queryNewsByCategoryAndTitle")
-    public List<News> queryNewsByCategoryAndTitle(News news) {
-        return newsQueryService.queryNews(news);
-    }
-
-    /**
-     * 查询所有新闻类别
-     * @return
-     */
-    @GetMapping("findAllCategory")
-    public List<Category> findAllCategory() {
+    @GetMapping("/findAllCategory")
+    public List<Category> findAllCategory(){
         return newsQueryService.findAllCategory();
     }
 
-    /**
-     * 根据唯一标识查询单条新闻
-     * @return
-     */
-    @GetMapping("findNewsById/{id}")
-    public News findNewsById(@PathVariable int id) {
+    @GetMapping("/findNewsById/{id}")
+    public News findNewsById(@PathVariable int id){
         return newsQueryService.findNewsById(id);
     }
+
+    //@Autowired
+    //private RestTemplate restTemplate;
+    //
+    //public String baseURL="http://localhost:8877/";
+    //
+    //@GetMapping("queryNews2")
+    //public ModelAndView queryItems(){
+    //    //泛型：LinkedHashMap
+    //    List list = restTemplate.getForObject(baseURL + "queryNews", List.class);
+    //    System.out.println(list);
+    //    ModelAndView mv = new ModelAndView();
+    //    mv.addObject("newsList",list);
+    //    mv.setViewName("index");
+    //    return mv;
+    //}
 
 }
