@@ -13,6 +13,8 @@
         <module>news-mapper</module>
         <module>news-edit-ms</module>
         <module>news-query-ms</module>
+        <module>news-eureka</module>
+        <module>news-zuul</module>
     </modules>
 
     <parent>
@@ -62,5 +64,6 @@
             </plugin>
         </plugins>
     </build>
+
 
 </project>

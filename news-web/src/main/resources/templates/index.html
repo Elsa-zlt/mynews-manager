@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>新闻首页</title>
+</head>
+<body>
+<form action="" method="post">
+    新闻分类：
+    <select name="categoryid">
+        <option value="0">全部</option>
+        <option th:each="category:${categoryList}"
+                th:value="${category.id}"
+                th:text="${category.cname}"></option>
+    </select>
+    新闻标题：<input type="text" name="title">
+    <input type="submit" value="查    询">
+</form>
+<table width="100%" border="1px">
+    <tr th:each="news:${newsList}">
+        <td th:text="${news.id}"></td>
+        <td th:text="${news.title}"></td>
+        <td th:text="${news.summary}"></td>
+        <td th:text="${news.author}"></td>
+        <td th:text="${news.createdate}"></td>
+        <td>
+            <a href="#">编辑</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

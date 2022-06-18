@@ -3,8 +3,11 @@ package com.web.news.mapper;
 import com.web.news.pojo.News;
 import com.web.news.pojo.NewsExample;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+@Mapper
 public interface NewsMapper {
     long countByExample(NewsExample example);
 
