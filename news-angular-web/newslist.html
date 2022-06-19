@@ -7,14 +7,15 @@
 	<meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
 	<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="adminLTE/css/AdminLTE.css"/>
-	<link  rel="stylesheet" href="adminLTE/css/skins/_all-skins.css"/>
+	<link  rel="stylesheet" href="angularjs/pagination.css"/>
 	<!--<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>-->
 	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
 	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 	<script type="text/javascript" src="angularjs/angular.min.js"></script>
-	<script >
-		var app = angular.module('newsApp',[]);
+	<script type="text/javascript" src="angularjs/pagination.js"></script>
+	<script>
+		var app = angular.module('newsApp',['pagination']);
 		app.controller('newsController',function ($scope,$http){
 			var URL_QUERY = "http://localhost:8899/news-query/";
 			var URL_EDIT = "http://localhost:8899/news-edit/";
@@ -46,14 +47,49 @@
 					$scope.entity = response;
 				})
 			}
+
+			$scope.updateIds = [];
 			$scope.updateSelection = function (event,news_id) {
 				if(event.target.checked) {
-					alert(news_id);
 					$scope.updateIds.push(news_id);
 				} else {
 					var index = $scope.updateIds.indexOf(news_id);
 					$scope.updateIds.splice(index,1);
 				}
+			}
+
+			$scope.dele = function () {
+				if(confirm('是否要删除选中的新闻?')) {
+					$http.get(URL_EDIT + 'removeNews?ids='+$scope.updateIds).success(function (res) {
+						if(res.code == 200) {
+							$scope.loadAllNews();
+						} else {
+							alert('删除失败')
+						}
+					});
+				}
+			}
+
+			//分页控件配置
+			$scope.paginationConf = {
+				currentPage : 1,
+				totalItems : 5,
+				itemsPerPage : 6,
+				perPageOptions : [6,10,20,30,40,50],
+				onChange : function (){
+					$scope.reloadList();
+				}
+			};
+
+			$scope.reloadList = function (){
+				$scope.findByPage($scope.paginationConf.currentPage,$scope.paginationConf.itemsPerPage);
+			}
+
+			$scope.findByPage = function (pageNum,pageSize){
+				$http.get(URL_QUERY+'findByPage?pageNum='+pageNum+'&pageSize='+pageSize).success(function (response){
+					$scope.newsList = response.rows;
+					$scope.paginationConf.totalItems = response.total;
+				});
 			}
 		});
 	</script>

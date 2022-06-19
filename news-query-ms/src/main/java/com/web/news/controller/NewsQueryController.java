@@ -1,7 +1,10 @@
 package com.web.news.controller;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.web.news.pojo.Category;
 import com.web.news.pojo.News;
+import com.web.news.pojo.PageResult;
 import com.web.news.service.NewsQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,20 +40,14 @@ public class NewsQueryController {
         return newsQueryService.findNewsById(id);
     }
 
-    //@Autowired
-    //private RestTemplate restTemplate;
-    //
-    //public String baseURL="http://localhost:8877/";
-    //
-    //@GetMapping("queryNews2")
-    //public ModelAndView queryItems(){
-    //    //泛型：LinkedHashMap
-    //    List list = restTemplate.getForObject(baseURL + "queryNews", List.class);
-    //    System.out.println(list);
-    //    ModelAndView mv = new ModelAndView();
-    //    mv.addObject("newsList",list);
-    //    mv.setViewName("index");
-    //    return mv;
-    //}
+    @GetMapping("/findByPage")
+    public PageResult findByPage(int pageNum, int pageSize){
+        PageHelper.startPage(pageNum,pageSize);//分页的拦截，重构分页的sql
+        Page<News> page = (Page<News>) newsQueryService.findAllNews();
+        PageResult pageResult = new PageResult();
+        pageResult.setRows(page.getResult());
+        pageResult.setTotal(page.getTotal());
+        return pageResult;
+    }
 
 }
