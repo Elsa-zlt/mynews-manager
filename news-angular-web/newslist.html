@@ -46,6 +46,15 @@
 					$scope.entity = response;
 				})
 			}
+			$scope.updateSelection = function (event,news_id) {
+				if(event.target.checked) {
+					alert(news_id);
+					$scope.updateIds.push(news_id);
+				} else {
+					var index = $scope.updateIds.indexOf(news_id);
+					$scope.updateIds.splice(index,1);
+				}
+			}
 		});
 	</script>
 
@@ -92,7 +101,7 @@
 			</tr>
 			<tr ng-repeat="news in newsList">
 				<td>
-					<input type="checkbox">
+					<input type="checkbox" ng-click="updateSelection($event,news.id)"/>
 				</td>
 				<td>{{news.title}}</td>
 				<td>{{news.summary}}</td>

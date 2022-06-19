@@ -40,12 +40,13 @@ public class NewsEditController {
         }
     }
 
-    @DeleteMapping("/deleteNews/{id}")
-    public RespBean deleteNews(@PathVariable int id){
+    @GetMapping("/removeNews")
+    public RespBean removeNews(int[] ids){
         try {
-            newsEditService.deleteNews(id);
+            System.out.println("news id:" + ids[0]);
+            newsEditService.removeNews(ids);
             return RespBean.ok("删除成功");
-        } catch (Exception e) {
+        }catch (Exception e){
             e.printStackTrace();
             return RespBean.err("删除失败");
         }

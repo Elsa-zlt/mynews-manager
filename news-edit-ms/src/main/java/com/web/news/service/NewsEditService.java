@@ -8,5 +8,5 @@ public interface NewsEditService {
 
     public void addNews(News news);
 
-    public void deleteNews(int id);
+    public void removeNews(int[] ids);
 }
